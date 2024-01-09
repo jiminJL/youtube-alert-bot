@@ -99,18 +99,7 @@ client.on("messageCreate", async (message) => {
   if (message == "!help") {
     ("Here's some commands you can try: \n !checknow - bot checks for new videos right now \n !goaway - bot stops responding for 15min \n !imissu - bot comes back immediately");
   }
-  if (message == "!goaway") {
-    message.channel.send(
-      "Ok broski 😔 I'll come back in 15min or when you say `!imissu`. L8er sk8er!"
-    );
-    return;
-  }
-  if (message == "!imissu") {
-    message.channel.send(
-      "Of course you did. I didn't miss you though. But I'm back now. Think twice before sending me away again *comrade*."
-    );
-    return;
-  }
+
   if (message == "!checknow") {
     console.log("Checking for new video now...");
     // Check for new video
