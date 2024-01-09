@@ -1,0 +1,16 @@
+runtime: nodejs20 # Specify the Node.js version you are using, e.g., nodejs14, nodejs12, etc.
+env: standard # Use the standard environment
+
+instance_class: F1 # Instance class specifies the machine type, F1 is the smallest
+
+automatic_scaling: # Automatic scaling is default for the standard environment
+  target_cpu_utilization: 0.65
+  min_instances: 1 # Keep at least one instance running
+
+env_variables:
+  DISCORD_BOT_TOKEN: "MTE5MzAzMTY2MTM3MDIzMjkzMw.G2m5pq.l_0qUcSmjjSWyaTADgzrpYQGTEBgej6uOTKjwk"
+  # Add other environment variables if needed
+
+handlers: # Define URL handlers
+  - url: /.* # This configuration is necessary to handle all requests
+    script: auto
