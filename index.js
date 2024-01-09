@@ -60,30 +60,35 @@ const expectedGreetings = [
 let canRespondTime = null;
 
 client.on("messageCreate", async (message) => {
+  console.log(message.content);
   if (message.author.bot) return; // Ignore messages from bots
 
   // Check if bot is in pause state
-  if (canRespondTime && Date.now() < canRespondTime) {
-    if (message.content.toLowerCase() == "!imissu") {
-      canRespondTime = null; // Reset the timer on !imissu command
+  if (message.content && message.content.toLowerCase() == "!missu") {
+    if (canRespondTime && Date.now() < canRespondTime) {
       message.channel.send(
         "Of course you did. I didn't miss you though. But I'm back now. Think twice before sending me away again *comrade*."
       );
+      canRespondTime = null; // Reset the timer on !imissu command
+      return;
+    } else {
+      message.channel.send(
+        "I've BEEN back!! Did you think I was still gone or smthg ( ｡ •̀ ᴖ •́ ｡)"
+      );
+      return;
     }
-    return;
   }
 
   // Process other commands
-  if (message.content.toLowerCase() == "!goaway") {
+  if (message.content && message.content.toLowerCase() == "!goaway") {
     canRespondTime = Date.now() + 900000; // 15 minutes from now
     message.channel.send(
-      "Ok broski 😔 I'll come back in 15min or when you say `!imissu`. L8er sk8er!"
+      "Ok broski ( • ᴖ • ｡) I'll come back in 15min or when you say `!imissu`. L8er sk8er!"
     );
     return;
   }
 
-  message = message.content.toLowerCase();
-  if (message == "!howlong") {
+  if (message.content == "!howlong") {
     const currentTime = Date.now();
     const uptime = currentTime - startTime; // Calculate uptime in milliseconds
 
@@ -95,12 +100,17 @@ client.on("messageCreate", async (message) => {
     message.channel.send(
       `I've been serving our channel for ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`
     );
+    return;
   }
-  if (message == "!help") {
-    ("Here's some commands you can try: \n !checknow - bot checks for new videos right now \n !goaway - bot stops responding for 15min \n !imissu - bot comes back immediately");
+  if (message.content == "!help") {
+    console.log("Helping...");
+    message.channel.send(
+      "Here's some commands you can try: \n !checknow - bot checks for new videos right now \n !goaway - bot stops responding for 15min \n !missu - bot comes back immediately"
+    );
+    return;
   }
 
-  if (message == "!checknow") {
+  if (message.content == "!checknow") {
     console.log("Checking for new video now...");
     // Check for new video
     const newVideo = await checkForNewVideo();
@@ -111,12 +121,13 @@ client.on("messageCreate", async (message) => {
     }
     return;
   }
-
-  let isGreeting = expectedGreetings.some((greeting) =>
-    message.content.toLowerCase().startsWith(greeting)
-  );
-  if (isGreeting) {
-    message.channel.send(`${createFlamboyantHello()}`);
+  if (message.content) {
+    let isGreeting = expectedGreetings.some((greeting) =>
+      message.content.toLowerCase().startsWith(greeting)
+    );
+    if (isGreeting) {
+      message.channel.send(`${createFlamboyantHello()}`);
+    }
   }
 });
 
@@ -133,8 +144,19 @@ async function checkForNewVideo() {
       latestVideoId = latestVideo.id.videoId;
 
       const videoUrl = `https://www.youtube.com/watch?v=${latestVideoId}`;
-      const preamble = `🚨 WEE WOO WEE WOO 🚨`;
-      const new_video_message = `New video just came out! Go give it a watch. *Like, comment, and subscribe too maybe*: ${videoUrl}`;
+      const preamble = `🚨 WEE WOO WEE WOO 🚨
+
+           ∧＿∧
+      　  (｡･ω･｡)つ━★・*。
+        ⊂/　    /　     。*
+      　 しーＪ　      ＊ •
+                          ˚‧ ₊
+
+
+      `;
+      const new_video_message =
+        "\n New video just came out! Go give it a watch. *Like, comment, and subscribe too maybe*:" +
+        videoUrl;
       client.channels.cache.get(DISCORD_CHANNEL_ID).send(preamble);
       client.channels.cache.get(DISCORD_CHANNEL_ID).send(new_video_message);
       return true;
