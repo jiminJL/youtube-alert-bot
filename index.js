@@ -22,33 +22,80 @@ client.on("ready", () => {
 const CHANNELS = ["Jo Shoua"]; // Only listen to these channels
 
 const flamboyantGreetings = [
-  "oh marvelous one",
-  "darling starlight",
-  "glorious friend",
-  "magnificent creature",
-  "exquisite comrade",
-  "dazzling soul",
-  "resplendent buddy",
-  "splendid fellow",
-  "radiant spirit",
-  "illustrious mate",
+  "Greetings, comrade of camaraderie! Your 'hi' unites us like a rally for joy.",
+  "Hello, proletarian of positivity! Your greeting is the people's choice for happiness.",
+  "Salutations, vanguard of vivacity! Your 'hi' is more revitalizing than a workers' anthem.",
+  "Hi there, revolutionary of radiance! Your presence redistributes joy equally among us.",
+  "Greetings, marshal of mirth! Your hello ushers in an era of unparalleled cheer.",
+  "Hello, guardian of glee! Your greetings are a beacon of hope in the collective heart.",
+  "Hi, pioneer of pleasure! Your words build bridges of happiness across our communal spirit.",
+  "Greetings, comrade in cheer! Your 'hi' is like the dawn of a more joyful epoch.",
+  "Hello, ambassador of amusement! Your greeting sparks a joyful uprising in our souls.",
+  "Hi, leader of laughter! Your greeting rallies the masses to a cause of collective joy.",
 ];
 
 // Function to randomly pick a flamboyant greeting
 function createFlamboyantHello() {
   const randomIndex = Math.floor(Math.random() * flamboyantGreetings.length);
-  return (
-    "Hello, " +
-    flamboyantGreetings[randomIndex] +
-    "✨. It's ya bot, Jo Shoua bot!"
-  );
+  return flamboyantGreetings[randomIndex] + "✨. It's ya bot, Jo Shoua bot!";
 }
 
+const expectedGreetings = [
+  "hi",
+  "hey",
+  "hello",
+  "what's up",
+  "what's good",
+  "whats up",
+  "whats good",
+  "howdy",
+  "what's poppin",
+  "greetings",
+  "salutations",
+];
+
+let canRespondTime = null;
+
 client.on("messageCreate", async (message) => {
-  console.log("message received: ", message.content);
   if (message.author.bot) return; // Ignore messages from bots
-  // if (message.content.startsWith(IGNORE_PREFIX)) return;
-  if (message.content.toLowerCase() == "!checknow") {
+
+  // Check if bot is in pause state
+  if (canRespondTime && Date.now() < canRespondTime) {
+    if (message.content.toLowerCase() == "!imissu") {
+      canRespondTime = null; // Reset the timer on !imissu command
+      message.channel.send(
+        "Of course you did. I didn't miss you though. But I'm back now. Think twice before sending me away again *comrade*."
+      );
+    }
+    return;
+  }
+
+  // Process other commands
+  if (message.content.toLowerCase() == "!goaway") {
+    canRespondTime = Date.now() + 900000; // 15 minutes from now
+    message.channel.send(
+      "Ok broski 😔 I'll come back in 15min or when you say `!imissu`. L8er sk8er!"
+    );
+    return;
+  }
+
+  message = message.content.toLowerCase();
+  if (message == "!help") {
+    ("Here's some commands you can try: \n !checknow - bot checks for new videos right now \n !goaway - bot stops responding for 15min \n !imissu - bot comes back immediately");
+  }
+  if (message == "!goaway") {
+    message.channel.send(
+      "Ok broski 😔 I'll come back in 15min or when you say `!imissu`. L8er sk8er!"
+    );
+    return;
+  }
+  if (message == "!imissu") {
+    message.channel.send(
+      "Of course you did. I didn't miss you though. But I'm back now. Think twice before sending me away again *comrade*."
+    );
+    return;
+  }
+  if (message == "!checknow") {
     console.log("Checking for new video now...");
     // Check for new video
     const newVideo = await checkForNewVideo();
@@ -57,8 +104,13 @@ client.on("messageCreate", async (message) => {
       console.log("No new video. Current latest: ", latestVideoId);
       client.channels.cache.get(DISCORD_CHANNEL_ID).send("No new video yet");
     }
-  } else {
-    const videoUrl = `https://www.youtube.com/watch?v=${latestVideoId}`;
+    return;
+  }
+
+  let isGreeting = expectedGreetings.some((greeting) =>
+    message.content.toLowerCase().startsWith(greeting)
+  );
+  if (isGreeting) {
     message.channel.send(`${createFlamboyantHello()}`);
   }
 });
