@@ -12,8 +12,11 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const YOUTUBE_CHANNEL_ID = process.env.JOSH_YT_CHANNEL_ID;
 let latestVideoId = null; // To keep track of the latest video
 
+let startTime;
+
 client.on("ready", () => {
   console.log(`Successfully logged in as ${client.user.tag}!`);
+  startTime = Date.now(); // Save the start time when the bot becomes ready
   // Start interval to check for new videos every 30 minutes (1800000 milliseconds)
   setInterval(checkForNewVideo, 1800000);
 });
@@ -80,6 +83,19 @@ client.on("messageCreate", async (message) => {
   }
 
   message = message.content.toLowerCase();
+  if (message == "!howlong") {
+    const currentTime = Date.now();
+    const uptime = currentTime - startTime; // Calculate uptime in milliseconds
+
+    // Convert uptime to a readable format (e.g., hours, minutes, seconds)
+    const hours = Math.floor(uptime / (1000 * 60 * 60));
+    const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((uptime % (1000 * 60)) / 1000);
+
+    message.channel.send(
+      `I've been serving our channel for ${hours} hours, ${minutes} minutes, and ${seconds} seconds.`
+    );
+  }
   if (message == "!help") {
     ("Here's some commands you can try: \n !checknow - bot checks for new videos right now \n !goaway - bot stops responding for 15min \n !imissu - bot comes back immediately");
   }
