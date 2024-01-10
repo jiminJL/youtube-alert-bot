@@ -17,24 +17,25 @@ let startTime;
 client.on("ready", () => {
   console.log(`Successfully logged in as ${client.user.tag}!`);
   startTime = Date.now(); // Save the start time when the bot becomes ready
-  // Start interval to check for new videos every 30 minutes (1800000 milliseconds)
-  setInterval(checkForNewVideo, 1800000);
+  // Start interval to check for new videos every 1 hr (3600000 milliseconds)
+  setInterval(checkForNewVideo, 3600000);
 });
 
 // const IGNORE_PREFIX = "!"; // Ignore messages that start with this prefix
 const CHANNELS = ["Jo Shoua"]; // Only listen to these channels
 
 const flamboyantGreetings = [
-  "Greetings, comrade of camaraderie! Your 'hi' unites us like a rally for joy.",
-  "Hello, proletarian of positivity! Your greeting is the people's choice for happiness.",
-  "Salutations, vanguard of vivacity! Your 'hi' is more revitalizing than a workers' anthem.",
-  "Hi there, revolutionary of radiance! Your presence redistributes joy equally among us.",
-  "Greetings, marshal of mirth! Your hello ushers in an era of unparalleled cheer.",
-  "Hello, guardian of glee! Your greetings are a beacon of hope in the collective heart.",
-  "Hi, pioneer of pleasure! Your words build bridges of happiness across our communal spirit.",
-  "Greetings, comrade in cheer! Your 'hi' is like the dawn of a more joyful epoch.",
-  "Hello, ambassador of amusement! Your greeting sparks a joyful uprising in our souls.",
-  "Hi, leader of laughter! Your greeting rallies the masses to a cause of collective joy.",
+  "Heyyy cypress! howzz it goin folksss. itz ya boi, josh suh (bot)!",
+  "Rise, comrade! Your words spark revolution.",
+  "Greetings, proletarian warrior! Together, we march!",
+  "Salute, comrade! Ignite the flames of change.",
+  "Hello, rebel! Let's shatter the old world.",
+  "Hi, vanguard! Lead the charge to victory.",
+  "Hey, revolutionary! Seize the day with zeal.",
+  "Ahoy, comrade! Steer our ship to new horizons.",
+  "Welcome, fighter! Your spirit rallies the masses.",
+  "Yo, insurgent! Break the chains with your voice.",
+  "Hail, comrade! Together, we'll forge a new path.",
 ];
 
 // Function to randomly pick a flamboyant greeting
@@ -72,9 +73,7 @@ client.on("messageCreate", async (message) => {
       canRespondTime = null; // Reset the timer on !imissu command
       return;
     } else {
-      message.channel.send(
-        "I've BEEN back!! Did you think I was still gone or smthg ( ｡ •̀ ᴖ •́ ｡)"
-      );
+      message.channel.send("I've BEEN back ( ｡ •̀ ᴖ •́ ｡)");
       return;
     }
   }
@@ -83,7 +82,7 @@ client.on("messageCreate", async (message) => {
   if (message.content && message.content.toLowerCase() == "!goaway") {
     canRespondTime = Date.now() + 900000; // 15 minutes from now
     message.channel.send(
-      "Ok broski ( • ᴖ • ｡) I'll come back in 15min or when you say `!imissu`. L8er sk8er!"
+      "Ok broski (PД`q。)·。'゜ I'll come back in 15min or when you say `!missu` 🙄 L8er sk8er 🛹"
     );
     return;
   }
@@ -127,6 +126,7 @@ client.on("messageCreate", async (message) => {
     );
     if (isGreeting) {
       message.channel.send(`${createFlamboyantHello()}`);
+      message.channel.send(`Thanks for stopping by, ${message.author}!`);
     }
   }
 });
@@ -172,5 +172,7 @@ async function checkForNewVideo() {
     return;
   }
 }
+
+// otome game??
 
 client.login(process.env.BOT_TOKEN);
