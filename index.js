@@ -144,7 +144,7 @@ async function checkForNewVideo() {
       latestVideoId = latestVideo.id.videoId;
 
       const videoUrl = `https://www.youtube.com/watch?v=${latestVideoId}`;
-      const preamble = `🚨 WEE WOO WEE WOO 🚨
+      const preamble = `🚨 WEE WOO WEE WOO @everyone 🚨
 
            ∧＿∧
       　  (｡･ω･｡)つ━★・*。
